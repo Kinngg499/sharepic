@@ -1,0 +1,60 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.google.cloud.tools:appengine-gradle-plugin:2.4.5'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.10'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'com.reskill'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.reskill.account.AccountServiceApplication'
+        )
+    }
+}
+
+apply plugin: 'com.google.cloud.tools.appengine'
+
+dependencies {
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.7.1'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.7.1'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.7.1'
+    implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.7.1'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.0.33'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+
+    implementation group: 'com.google.cloud.sql', name: 'mysql-socket-factory-connector-j-8', version: '1.11.2'
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+appengine {  // App Engine tasks configuration
+    deploy {   // deploy configuration
+        projectId = 'share-pic-389111' // gcloud config set project
+        version = 'v1'   // gcloud to generate a version
+    }
+}
